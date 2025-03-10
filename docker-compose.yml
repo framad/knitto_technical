@@ -1,0 +1,27 @@
+version: '2'
+services:
+  odoo:
+    image: odoo:10
+    ports:
+      - "8039:8069"
+      - "8079:8072"
+    tty: true
+    command: odoo
+    volumes:
+      - data:/var/lib/odoo
+      - ./custom_modules:/mnt/extra-addons
+      - ./etc:/etc/odoo
+  db:
+    image: postgres:10
+    command: postgres -c 'max_connections=300'
+    ports:
+      - "5412:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin123!
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+volumes:
+  data:
+  postgresql:
